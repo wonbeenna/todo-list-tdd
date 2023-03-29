@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Add from './Add';
+import Add from '../Add';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 

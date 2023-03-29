@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import List from './components/list/List';
 import Add from './components/add/Add';
+import ConfirmList from './components/list/ConfirmList';
+import { v4 as uuid } from 'uuid';
+
+export interface TodoList {
+  id: string;
+  value: string;
+  isChecked: boolean;
+}
 
 function App() {
+  const [todoList, setTodoList] = useState<TodoList[]>([]);
+
   const handleAddTodo = (todoValue: string) => {
-    console.log(todoValue);
+    setTodoList((prevState) => [...prevState, { id: uuid(), value: todoValue, isChecked: false }]);
+  };
+
+  const handleDelete = (todoItems: TodoList[]) => {
+    setTodoList(todoItems);
+  };
+
+  const handleConfirm = (todoItems: TodoList[]) => {
+    setTodoList(todoItems);
   };
 
   return (
@@ -14,8 +32,9 @@ function App() {
         <h1>TODO APP</h1>
       </header>
       <main>
-        <List />
         <Add onAddList={handleAddTodo} />
+        <List todoList={todoList} onDelete={handleDelete} onConfirm={handleConfirm} />
+        <ConfirmList />
       </main>
     </div>
   );
