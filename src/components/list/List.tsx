@@ -1,6 +1,7 @@
 import React from 'react';
 import { TodoList } from '../../App';
 import ListItem from './ListItem';
+import styled from 'styled-components';
 
 interface ListProps {
   todoList: TodoList[];
@@ -18,12 +19,17 @@ const List = ({ todoList, onDelete, onConfirm }: ListProps) => {
   };
 
   return (
-    <ul>
+    <Ul>
+      <div>list</div>
       {todoList.map((todo) => (
         <ListItem key={todo.id} todo={todo} onDelete={handleDelete} onConfirm={handleConfirm} />
       ))}
-    </ul>
+    </Ul>
   );
 };
 
 export default List;
+
+const Ul = styled.ul`
+  list-style: none;
+`;

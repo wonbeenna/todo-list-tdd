@@ -13,6 +13,7 @@ export interface TodoList {
 
 function App() {
   const [todoList, setTodoList] = useState<TodoList[]>([]);
+  const [confirmTodoList, setConfirmTodoList] = useState<TodoList[]>([]);
 
   const handleAddTodo = (todoValue: string) => {
     setTodoList((prevState) => [...prevState, { id: uuid(), value: todoValue, isChecked: false }]);
@@ -22,8 +23,18 @@ function App() {
     setTodoList(todoItems);
   };
 
+  const handleConfirmDelete = (todoItems: TodoList[]) => {
+    setConfirmTodoList(todoItems);
+  };
+
   const handleConfirm = (todoItems: TodoList[]) => {
-    setTodoList(todoItems);
+    setTodoList(todoItems.filter((todo) => !todo.isChecked));
+    setConfirmTodoList((prevState) => [...prevState, ...todoItems.filter((todo) => todo.isChecked)]);
+  };
+
+  const handleCancel = (todoItems: TodoList[]) => {
+    setTodoList((prevState) => [...prevState, ...todoItems.filter((todo) => !todo.isChecked)]);
+    setConfirmTodoList(todoItems.filter((todo) => todo.isChecked));
   };
 
   return (
@@ -33,8 +44,10 @@ function App() {
       </header>
       <main>
         <Add onAddList={handleAddTodo} />
-        <List todoList={todoList} onDelete={handleDelete} onConfirm={handleConfirm} />
-        <ConfirmList />
+        <div className="App-main">
+          <List todoList={todoList} onDelete={handleDelete} onConfirm={handleConfirm} />
+          <ConfirmList todoList={confirmTodoList} onDelete={handleConfirmDelete} onCancel={handleCancel} />
+        </div>
       </main>
     </div>
   );

@@ -2,11 +2,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import List from '../List';
 import userEvent from '@testing-library/user-event';
+import ConfirmList from '../ConfirmList';
 
 const todoList = [
   { id: '1', value: 'test', isChecked: false },
   { id: '2', value: 'test', isChecked: false },
   { id: '3', value: 'test', isChecked: false }
+];
+
+const todoConfirmList = [
+  { id: '1', value: 'test', isChecked: true },
+  { id: '2', value: 'test', isChecked: true },
+  { id: '3', value: 'test', isChecked: true }
 ];
 
 describe('리스트', () => {
@@ -64,7 +71,20 @@ describe('리스트', () => {
     ]);
   });
 
-  it('완료처리 된 todo는 완료 list로 이동 된다.', () => {});
+  it('완료 list에서 체크박스 해제시 list로 돌아 간다.', () => {
+    const onDelete = jest.fn();
+    const onCancel = jest.fn();
 
-  it('완료 list에서 체크박스 해제시 list로 돌아 간다.', () => {});
+    render(<ConfirmList todoList={todoConfirmList} onDelete={onDelete} onCancel={onCancel} />);
+
+    const checkbox = screen.getByTestId('checkbox-1');
+
+    userEvent.click(checkbox);
+
+    expect(onCancel).toHaveBeenCalledWith([
+      { id: '1', value: 'test', isChecked: false },
+      { id: '2', value: 'test', isChecked: true },
+      { id: '3', value: 'test', isChecked: true }
+    ]);
+  });
 });
